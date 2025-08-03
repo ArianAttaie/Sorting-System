@@ -28,8 +28,9 @@ def select_format(event):
 
 root = tk.Tk()
 root.title("Sorting System")
-root.maxsize(500, 200)
-root.minsize(500, 200)
+root.iconbitmap('SortingSystem.ico')
+root.geometry("500x200")
+root.resizable(False, False)
 root.attributes('-alpha', 0.0)
 center(root)
 root.attributes('-alpha', 1.0)
