@@ -1,1 +1,1 @@
-A simple app made mainly organize your Dounloads folder
+A simple app made mainly to organize your Dounloads folder
