@@ -7,7 +7,7 @@ def get_user():
     user = os.getlogin()
     return user
 
-def sorting_files(files_path, user):
+def sort_files(files_path, user):
     for i in files_path:
 
         if os.path.isdir(i) == False:
@@ -40,6 +40,3 @@ def sorting_files(files_path, user):
 
         else:
             continue
-
-# user = get_user()
-# files = os.listdir(rf'C:\Users\{user}\Downloads')
