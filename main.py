@@ -1,7 +1,11 @@
 import os
-from alg import Sorting_System
 import tkinter as tk
 from tkinter import ttk
+
+from alg import Sorting_System
+from dict import system_path_dict as spd
+
+
 
 def center(win):
     win.update_idletasks()
@@ -18,20 +22,29 @@ def center(win):
 
 def select_path(event):
     selected_item = path_combo_box.get()
-    path_label.config(text="Selected folder: " + selected_item)
+    path_label.config(text="Set folder: " + selected_item)
 
-def select_format(event):
-    selected_item = format_combo_box.get()
-    format_label.config(text="Selected sorting system: " + selected_item)
+def select_system(event):
+    selected_item = system_combo_box.get()
+    system_label.config(text="Set sorting system: " + selected_item)
 
-def sort_task():
+def store_path(path):
+    memory = open(rf"{os.path.dirname(__file__)}\dict\path_memory.txt", 'r')
+    memory_items = memory.read().split(',')
+    memory.close()
+
+    if path not in memory_items:
+        if path not in list(spd.path_dict.values()):
+            memory2 = open(rf"{os.path.dirname(__file__)}\dict\path_memory.txt", 'a')
+            memory2.write(f",{path}")
+            memory2.close()
+    
+    
+def sorting_task():
     path = path_combo_box.get()
-    formatting = format_combo_box.get()
-    counter = 0
-    for i in format_list:
-        if i == formatting:
-            counter+=1
+    formatting = system_combo_box.get()
 
+    # Check if the directory does exist
     if os.path.isdir(path) == False:
         top = tk.Toplevel()
         top.title('Task Report')
@@ -47,8 +60,9 @@ def sort_task():
         button.pack(pady=10)
         top.mainloop()
 
+    # Check if the system does exists
     elif os.path.isdir(path) == True:
-        if counter == 0:
+        if formatting not in system_list:
             top = tk.Toplevel()
             top.title('Task Report')
             top.iconbitmap('SortingSystem.ico')
@@ -63,10 +77,11 @@ def sort_task():
             button.pack(pady=10)
             top.mainloop()
 
+        # Run the alg if everything was OK
         else:
             Sorting_System.path = path_combo_box.get()
             Sorting_System.sort_files()
-            print(Sorting_System.path)
+            store_path(path_combo_box.get())
 
             top = tk.Toplevel()
             top.title('Task Report')
@@ -84,9 +99,6 @@ def sort_task():
 
         
 
-
-format_list = ["file format"]
-
 root = tk.Tk()
 root.title("Sorting System")
 root.iconbitmap('SortingSystem.ico')
@@ -99,20 +111,32 @@ root.attributes('-alpha', 1.0)
 
 path_label = tk.Label(root, text="Choose your folder: ")
 path_label.pack(pady=10)
-path_combo_box = ttk.Combobox(root, values=[rf"C:\Users\{os.getlogin()}\Downloads",
-                                             rf"C:\Users\{os.getlogin()}\Documents",
-                                               rf"C:\Users\{os.getlogin()}\OneDrive\Documents"], width=35)
+
+path_list = [spd.path_dict['Downloads'], spd.path_dict['Documents1'], spd.path_dict['Documents2']]
+memory = open(rf"{os.path.dirname(__file__)}\dict\path_memory.txt", 'r')
+memory_list = memory.read().split(',')
+memory_list.remove('')
+if len(memory_list) != 0:
+    path_list += memory_list
+memory.close()
+print(memory_list)
+print(path_list)
+path_combo_box = ttk.Combobox(root, values=path_list, width=35)
 path_combo_box.pack(pady=5)
 
-format_label = tk.Label(root, text="Choose the sorting system: ")
-format_label.pack(pady=10)
-format_combo_box = ttk.Combobox(root, values=format_list, width=35)
-format_combo_box.pack(pady=5)
+
+system_label = tk.Label(root, text="Choose the sorting system: ")
+system_label.pack(pady=10)
+
+system_list = [spd.system_dict['format']]
+system_combo_box = ttk.Combobox(root, values=system_list, width=35)
+system_combo_box.pack(pady=5)
+
 
 path_combo_box.bind("<<ComboboxSelected>>", select_path)
-format_combo_box.bind("<<ComboboxSelected>>", select_format)
+system_combo_box.bind("<<ComboboxSelected>>", select_system)
 
-button = tk.Button(root, text="Sort", width=25, command=sort_task).pack(pady=15)
+button = tk.Button(root, text="Sort", width=25, command=sorting_task).pack(pady=15)
 
 
 root.mainloop()
