@@ -24,10 +24,6 @@ def select_path(event):
     selected_item = path_combo_box.get()
     path_label.config(text="Set folder: " + selected_item)
 
-def select_system(event):
-    selected_item = system_combo_box.get()
-    system_label.config(text="Set sorting system: " + selected_item)
-
 def store_path(path):
     memory = open(rf"{os.path.dirname(__file__)}\dict\path_memory.txt", 'r')
     memory_items = memory.read().split(',')
@@ -37,12 +33,10 @@ def store_path(path):
         if path not in list(spd.path_dict.values()):
             memory2 = open(rf"{os.path.dirname(__file__)}\dict\path_memory.txt", 'a')
             memory2.write(f",{path}")
-            memory2.close()
-    
+            memory2.close()  
     
 def sorting_task():
     path = path_combo_box.get()
-    formatting = system_combo_box.get()
 
     # Check if the directory does exist
     if os.path.isdir(path) == False:
@@ -62,7 +56,7 @@ def sorting_task():
 
     # Check if the system does exists
     elif os.path.isdir(path) == True:
-        if formatting not in system_list:
+        if system_var.get() == False:
             top = tk.Toplevel()
             top.title('Task Report')
             top.iconbitmap('SortingSystem.ico')
@@ -76,9 +70,8 @@ def sorting_task():
             button = tk.Button(top, text="OK", command=top.destroy)
             button.pack(pady=10)
             top.mainloop()
-
-        # Run the alg if everything was OK
         else:
+            # Run the alg if everything was OK
             Sorting_System.directory_path = path_combo_box.get()
             Sorting_System.sort_files()
             store_path(path_combo_box.get())
@@ -121,18 +114,14 @@ if len(memory_list) != 0:
 memory.close()
 path_combo_box = ttk.Combobox(root, values=path_list, width=35)
 path_combo_box.pack(pady=5)
+path_combo_box.bind("<<ComboboxSelected>>", select_path)
 
 
 system_label = tk.Label(root, text="Choose the sorting system: ")
-system_label.pack(pady=10)
+system_label.pack(pady=5)
+system_var = tk.BooleanVar()
+tk.Radiobutton(root, text='File format', variable=system_var, value=True).pack(pady=5)
 
-system_list = [spd.system_dict['format']]
-system_combo_box = ttk.Combobox(root, values=system_list, width=35)
-system_combo_box.pack(pady=5)
-
-
-path_combo_box.bind("<<ComboboxSelected>>", select_path)
-system_combo_box.bind("<<ComboboxSelected>>", select_system)
 
 button = tk.Button(root, text="Sort", width=25, command=sorting_task).pack(pady=15)
 

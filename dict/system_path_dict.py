@@ -7,7 +7,3 @@ path_dict = {
     'Documents1': rf"C:\Users\{user}\Documents",
     'Documents2': rf"C:\Users\{user}\OneDrive\Documents"
 }
-
-system_dict = {
-    'format': "file format"
-}
