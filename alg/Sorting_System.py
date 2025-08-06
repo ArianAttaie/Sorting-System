@@ -10,10 +10,15 @@ def get_list(path):
     return files
 
 def sort_files():
+    my_files = get_list(directory_path)
 
-    for i in get_list(directory_path):
+    for i in my_files:
+        isdir = os.path.isdir(rf"{directory_path}\{i}")
 
-        if os.path.isdir(i) == False:
+        if isdir == True:
+            continue
+
+        elif isdir == False:
             splited = i.split('.')
 
             # skipping 'ini' files:
@@ -28,21 +33,10 @@ def sort_files():
 
                 # Check if the file already exists in the directory or not
                 if os.path.exists(rf'{directory_path}\{splited[-1]}_format\{i}') == False:
-                    
+
                     # Moveing the file
                     os.rename(rf'{directory_path}\{i}' , rf'{directory_path}\{splited[-1]}_format\{i}')
                     logging.info(f'MOVED , file \"{i}\" moved to \"{splited[-1]}_format\" folder ')
 
                 else:
                     logging.info(f'EXIST , file \"{i}\" already exists in \"{splited[-1]}_format\" folder ')
-                continue
-
-            else:
-                continue
-
-        else:
-            continue
-
-
-
-print(os.path.isdir(rf"D:\Downloads\Factorio.v2.0.4.1.PirateGames.ir"))
