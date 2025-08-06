@@ -79,7 +79,7 @@ def sorting_task():
 
         # Run the alg if everything was OK
         else:
-            Sorting_System.path = path_combo_box.get()
+            Sorting_System.directory_path = path_combo_box.get()
             Sorting_System.sort_files()
             store_path(path_combo_box.get())
 
@@ -119,8 +119,6 @@ memory_list.remove('')
 if len(memory_list) != 0:
     path_list += memory_list
 memory.close()
-print(memory_list)
-print(path_list)
 path_combo_box = ttk.Combobox(root, values=path_list, width=35)
 path_combo_box.pack(pady=5)
 

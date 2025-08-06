@@ -3,7 +3,7 @@ import logging
 
 logging.basicConfig(filename = "Sorting.log", level = logging.INFO , format = '%(filename)s , %(asctime)s , %(levelname)s , %(message)s')
 user = os.getlogin()
-path = str()
+directory_path = str()
 
 def get_list(path):
     files = os.listdir(path)
@@ -11,7 +11,7 @@ def get_list(path):
 
 def sort_files():
 
-    for i in get_list(path):
+    for i in get_list(directory_path):
 
         if os.path.isdir(i) == False:
             splited = i.split('.')
@@ -24,13 +24,13 @@ def sort_files():
             elif len(splited) > 1:
 
                 # Making directory if it doesn't exist
-                os.makedirs(rf'{path}\{splited[-1]}_format', exist_ok=True)
+                os.makedirs(rf'{directory_path}\{splited[-1]}_format', exist_ok=True)
 
                 # Check if the file already exists in the directory or not
-                if os.path.exists(rf'{path}\{splited[-1]}_format\{i}') == False:
+                if os.path.exists(rf'{directory_path}\{splited[-1]}_format\{i}') == False:
                     
                     # Moveing the file
-                    os.rename(rf'{path}\{i}' , rf'{path}\{splited[-1]}_format\{i}')
+                    os.rename(rf'{directory_path}\{i}' , rf'{directory_path}\{splited[-1]}_format\{i}')
                     logging.info(f'MOVED , file \"{i}\" moved to \"{splited[-1]}_format\" folder ')
 
                 else:
@@ -42,3 +42,7 @@ def sort_files():
 
         else:
             continue
+
+
+
+print(os.path.isdir(rf"D:\Downloads\Factorio.v2.0.4.1.PirateGames.ir"))
